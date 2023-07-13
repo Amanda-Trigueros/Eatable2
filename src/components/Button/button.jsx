@@ -92,11 +92,7 @@ const StyledButton = styled.button`
     cursor: not-allowed;
   }
 
-  .fixed {
-    
-    position: fixed;
-   
-  }
+  
 
   ${(props) => typeStyles(props.type)}
   ${(props) => sizeStyles(props.size, props.rounded)}

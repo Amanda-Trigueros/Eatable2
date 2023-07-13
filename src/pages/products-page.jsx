@@ -3,6 +3,8 @@ import eatableClient from "../services/eatable-client";
 import styled from "@emotion/styled";
 import { colors } from "../styles/colors";
 import Button from "../components/Button/button";
+import Delete from "../assets/images/delete-bin-fill.png";
+import Edit from "../assets/images/edit-box-fill.png";
 
 const Container = styled.div`
   max-width: 1000px;
@@ -65,6 +67,25 @@ const FoodPrice = styled.p`
   padding: 0.5rem;
 `;
 
+const ButtonContainer = styled.div`
+  height: 80px;
+  width: 25.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 0px;
+  z-index: 9999;
+  background-color: ${colors.pallette.lightGray};
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 0px 10px 10px 10px;
+`;
+
 function Products() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -87,31 +108,44 @@ function Products() {
     fetchData();
   }, []);
 
-  return(
+  const capitalizeWords = (name) => {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
+  return (
     <Container>
       <PageTitle>Products Dashboard </PageTitle>
 
       {loading && <p>Loading data...</p>}
 
       {error && <p>Error: {error}</p>}
-      
 
       {data && (
         <CardsCointainer>
           {data.map((product) => (
             <FoodCard key={product.id}>
               <FoodPicture src={product.picture_url} />
-              <FoodName>{product.name}</FoodName>
+              <FoodName>{capitalizeWords(product.name)}</FoodName>
               <FoodPrice>${product.price / 100}</FoodPrice>
+              <LogoContainer>
+                <img src={Edit} />
+                <img src={Delete} />
+              </LogoContainer>
             </FoodCard>
           ))}
         </CardsCointainer>
       )}
-
-      <Button className="fixed" type={"primary"} isFullWidth > Create Product </Button>
-      
+      <ButtonContainer>
+        <Button className="fixed" type={"primary"} isFullWidth>
+          {" "}
+          Create Product{" "}
+        </Button>
+      </ButtonContainer>
     </Container>
-  )
+  );
 }
 
 export default Products;
