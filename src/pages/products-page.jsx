@@ -5,10 +5,13 @@ import { colors } from "../styles/colors";
 import Button from "../components/Button/button";
 import Delete from "../assets/images/delete-bin-fill.png";
 import Edit from "../assets/images/edit-box-fill.png";
+import DeleteProduct from "./delete-page";
+
 
 const Container = styled.div`
   max-width: 1000px;
   margin: auto;
+
 `;
 
 const PageTitle = styled.h1`
@@ -26,8 +29,6 @@ const CardsCointainer = styled.div`
   flex-wrap: wrap;
   margin: auto;
   padding: 1.25rem;
-
-  
 `;
 
 const FoodCard = styled.div`
@@ -41,8 +42,9 @@ const FoodCard = styled.div`
   gap: 1px;
   margin: 0.81rem;
 
-  
+
 `;
+
 
 const FoodPicture = styled.img`
   filter: drop-shadow(0px 20px 20px rgba(0, 0, 0, 0.2));
@@ -76,12 +78,13 @@ const FoodPrice = styled.p`
 
 const ButtonContainer = styled.div`
   height: 80px;
-  width: 25.875rem;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
   bottom: 0px;
+  left: 0px;
   z-index: 9999;
   background-color: ${colors.pallette.lightGray};
 `;
@@ -93,10 +96,26 @@ const LogoContainer = styled.div`
   padding: 0px 10px 10px 10px;
 `;
 
+const DeleteModal = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: ${colors.pallette.black};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  
+`;
 function Products() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [productId, setProductId] = useState(4);
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,13 +136,28 @@ function Products() {
 
   const capitalizeWords = (name) => {
     return name
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   };
 
+  function handleCloseDelete() {
+    setIsOpen(false);
+  }
+
+  async function handleDeleteProduct() {
+    try {
+      await fetch(`/api/products/${productId}`, {
+        method: "DELETE",
+      });
+      console.log(`Product with ID ${productId} deleted successfully.`);
+    } catch (error) {
+      console.error(`Error deleting product with ID ${productId}:`, error);
+    }
+  }
+
   return (
-    <Container>
+    <Container >
       <PageTitle>Products Dashboard </PageTitle>
 
       {loading && <p>Loading data...</p>}
@@ -133,13 +167,17 @@ function Products() {
       {data && (
         <CardsCointainer>
           {data.map((product) => (
-            <FoodCard key={product.id}>
+            <FoodCard key={product.id}   >
               <FoodPicture src={product.picture_url} />
               <FoodName>{capitalizeWords(product.name)}</FoodName>
               <FoodPrice>${product.price / 100}</FoodPrice>
               <LogoContainer>
                 <img src={Edit} />
-                <img src={Delete} />
+                <img
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setIsOpen(true)}
+                  src={Delete}
+                />
               </LogoContainer>
             </FoodCard>
           ))}
@@ -147,10 +185,17 @@ function Products() {
       )}
       <ButtonContainer>
         <Button className="fixed" type={"primary"} isFullWidth>
-          {" "}
-          Create Product{" "}
+          Create Product
         </Button>
       </ButtonContainer>
+      {isOpen ? (
+        <DeleteModal>
+          <DeleteProduct
+            onNoClick={handleCloseDelete}
+            onYesClick={handleDeleteProduct}
+          />
+        </DeleteModal>
+      ) : null}
     </Container>
   );
 }

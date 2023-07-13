@@ -23,16 +23,16 @@ function typeStyles(type) {
 
     case "secondary":
       return `
-        background-color: ${colors.stone[500]};
+        background-color: ${colors.pallette.yellow};
         color: ${colors.white};
         &:hover {
-          background-color: ${colors.stone[600]};
+          background-color: ${colors.yellow[600]};
         }
         &:active {
-          background-color: ${colors.stone[700]};
+          background-color: ${colors.yellow[700]};
         }
         &:focus {
-          outline: 2px solid ${colors.stone[700]};
+          outline: 2px solid ${colors.yellow[700]};
         }
       `;
 
@@ -55,6 +55,7 @@ function sizeStyles(size, rounded) {
           padding: 0.875rem ${rounded ? "" : "1.5rem"};
           ${typography.text.lg}
           line-height: 1em;
+          width: 16.375rem;
         `;
 
     default:
