@@ -26,6 +26,8 @@ const CardsCointainer = styled.div`
   flex-wrap: wrap;
   margin: auto;
   padding: 1.25rem;
+
+  
 `;
 
 const FoodCard = styled.div`
@@ -38,6 +40,8 @@ const FoodCard = styled.div`
   flex-wrap: wrap;
   gap: 1px;
   margin: 0.81rem;
+
+  
 `;
 
 const FoodPicture = styled.img`
@@ -46,6 +50,9 @@ const FoodPicture = styled.img`
   height: 8.125rem;
   border-radius: 8.125rem;
   margin: auto;
+  top: -40;
+  object-fit: cover;
+  aspecr-ratio: 1/1;
 `;
 
 const FoodName = styled.p`
