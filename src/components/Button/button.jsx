@@ -74,22 +74,28 @@ const StyledButton = styled.button`
   line-height: 2em;
   cursor: pointer;
 
-  width: ${({ isFullWidth }) => (isFullWidth ? "100%" : "fit-content")};
+  width: ${({ isFullWidth }) => (isFullWidth ? "19.375rem" : "fit-content")};
   padding: 0.75rem ${({ rounded }) => (rounded ? "0.75rem" : "1rem")};
   border-radius: ${({ rounded }) => (rounded ? "999px" : "1.875rem")};
 
   &:hover {
-    background-color: ${colors.gray[300]};
+    background-color: ${colors.orange[300]};
   }
   &:active {
-    background-color: ${colors.gray[400]};
+    background-color: ${colors.orange[400]};
   }
   &:focus {
-    outline: 2px solid ${colors.gray[400]};
+    outline: 2px solid ${colors.orange[400]};
   }
   &:disabled {
     opacity: 60%;
     cursor: not-allowed;
+  }
+
+  .fixed {
+    
+    position: fixed;
+   
   }
 
   ${(props) => typeStyles(props.type)}
