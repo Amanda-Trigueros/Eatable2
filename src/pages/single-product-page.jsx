@@ -68,7 +68,6 @@ const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
   bottom: 0px;
   z-index: 9999;
   background-color: ${colors.pallette.lightGray};
