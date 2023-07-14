@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import eatableClient from "../services/eatable-client";
+
 import Button from "../components/Button/button";
 import { colors } from "../styles/colors";
+import { getProduct } from "../services/products-service";
 
 const DeleteContainer = styled.div`
   display: flex;
@@ -29,17 +30,17 @@ const DeleteTitle = styled.h1`
   font-weight: 600;
 `;
 
-function DeleteProduct(onNoClick, onYesClick) {
-  // const [isOpen, setIsOpen] = useState(false);
-  const [productId, setProductId] = useState(4);
+function DeleteProduct({ id, onNoClick, onYesClick }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const [productId, setProductId] = useState({});
+  
   useEffect(() => {
-    const fetchData = async (id) => {
+    const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await eatableClient(`/products/${id}`);
+        const response = await getProduct(id);
+        setProductId(response)
         setError(null);
       } catch (error) {
         setError(error.message);
@@ -48,19 +49,8 @@ function DeleteProduct(onNoClick, onYesClick) {
       }
     };
 
-    fetchData(productId);
-  }, [productId]);
-
-  // async function handleDeleteProduct() {
-  //   try {
-  //     await fetch(`/api/products/${productId}`, {
-  //       method: "DELETE",
-  //     });
-  //     console.log(`Product with ID ${productId} deleted successfully.`);
-  //   } catch (error) {
-  //     console.error(`Error deleting product with ID ${productId}:`, error);
-  //   }
-  // }
+    fetchData();
+  }, [id]);
 
   return (
     <div>

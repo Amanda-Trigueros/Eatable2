@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
-import eatableClient from "../services/eatable-client";
+import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
+
+import eatableClient from "../services/eatable-client";
 import { colors } from "../styles/colors";
+import { removeProduct } from "../services/products-service";
 import Button from "../components/Button/button";
 import Delete from "../assets/images/delete-bin-fill.png";
 import Edit from "../assets/images/edit-box-fill.png";
 import DeleteProduct from "./delete-page";
 
-
 const Container = styled.div`
   max-width: 1000px;
   margin: auto;
-
 `;
 
 const PageTitle = styled.h1`
@@ -41,10 +42,7 @@ const FoodCard = styled.div`
   flex-wrap: wrap;
   gap: 1px;
   margin: 0.81rem;
-
-
 `;
-
 
 const FoodPicture = styled.img`
   filter: drop-shadow(0px 20px 20px rgba(0, 0, 0, 0.2));
@@ -107,15 +105,22 @@ const DeleteModal = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  
 `;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: ${colors.white};
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+`;
+
 function Products() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [productId, setProductId] = useState(4);
-  
+  const [productId, setProductId] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,23 +146,28 @@ function Products() {
       .join(" ");
   };
 
+  function handleOpenDeleteModal(id) {
+    setProductId(id);
+    setIsOpen(true);
+  }
+
   function handleCloseDelete() {
     setIsOpen(false);
   }
 
   async function handleDeleteProduct() {
     try {
-      await fetch(`/api/products/${productId}`, {
-        method: "DELETE",
-      });
+      await removeProduct(productId);
       console.log(`Product with ID ${productId} deleted successfully.`);
+      setData(data.filter((product) => product.productId !== productId));
+      setIsOpen(false);
     } catch (error) {
       console.error(`Error deleting product with ID ${productId}:`, error);
     }
   }
 
   return (
-    <Container >
+    <Container>
       <PageTitle>Products Dashboard </PageTitle>
 
       {loading && <p>Loading data...</p>}
@@ -167,15 +177,19 @@ function Products() {
       {data && (
         <CardsCointainer>
           {data.map((product) => (
-            <FoodCard key={product.id}   >
-              <FoodPicture src={product.picture_url} />
+            <FoodCard key={product.id}>
+              <Link to={`/products/${product.id}`}>
+                <FoodPicture src={product.picture_url} />
+              </Link>
               <FoodName>{capitalizeWords(product.name)}</FoodName>
               <FoodPrice>${product.price / 100}</FoodPrice>
               <LogoContainer>
-                <img src={Edit} />
+                <Link to={`/edit/${product.id}`}>
+                  <img src={Edit} style={{ cursor: "pointer" }} />
+                </Link>
                 <img
                   style={{ cursor: "pointer" }}
-                  onClick={() => setIsOpen(true)}
+                  onClick={() => handleOpenDeleteModal(product.id)}
                   src={Delete}
                 />
               </LogoContainer>
@@ -184,13 +198,16 @@ function Products() {
         </CardsCointainer>
       )}
       <ButtonContainer>
-        <Button className="fixed" type={"primary"} isFullWidth>
-          Create Product
-        </Button>
+        <StyledLink to="/create">
+          <Button className="fixed" type="primary" isFullWidth>
+            Create Product
+          </Button>
+        </StyledLink>
       </ButtonContainer>
       {isOpen ? (
         <DeleteModal>
           <DeleteProduct
+            id={productId}
             onNoClick={handleCloseDelete}
             onYesClick={handleDeleteProduct}
           />
