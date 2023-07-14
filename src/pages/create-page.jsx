@@ -1,8 +1,9 @@
-import { useState } from "react";
 import Input from "../components/Input";
 import styled from "@emotion/styled";
 import { colors } from "../styles/colors";
 import Button from "../components/Button/button";
+import { createProduct } from "../services/products-service";
+import { Link } from "react-router-dom";
 
 const PageTitle = styled.h1`
   font-size: 1.375rem;
@@ -14,11 +15,20 @@ const PageTitle = styled.h1`
 `;
 
 const StyledForm = styled.form`
+  width: 21.875rem;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-between;
-  height: 55vh;
+  height: 80vh;
+`;
+
+const StyledInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+ 
 `;
 
 const ContainerForm = styled.div`
@@ -33,19 +43,37 @@ const ButtonContainer = styled.div`
   background-color: ${colors.pallette.lightGray};
 `;
 
-function CreateProduct() {
-  const { create } = useState();
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: ${colors.white};
+  text-align: center;
 
-  function handleSubmit(e) {
+  font-size: 1.125rem;
+  font-weight: 600;
+`;
+
+function CreateProduct() {
+  async function handleSubmit(e) {
     e.preventDefault();
-    const { name, price, description, picture } = e.target.elements;
-    const credentials = {
+    const { name, price, category, description,  picture_url } = e.target.elements;
+
+   
+    const productData = {
       name: name.value,
       price: price.value,
+      category: category.value,
       description: description.value,
-      picture: picture.value,
+      picture_url: picture_url.value,
     };
-    create(credentials);
+
+    console.log(productData)
+
+     try {
+       const response = await createProduct(productData);
+       console.log("Product created successfully:", response);
+     } catch (error) {
+       console.error("Error creating product:", error.message);
+     }
   }
 
   return (
@@ -53,22 +81,23 @@ function CreateProduct() {
       <PageTitle>Create Product </PageTitle>
       <ContainerForm>
         <StyledForm onSubmit={handleSubmit}>
-          <div>
-            <Input label={"Name"} name={"name"}></Input>
-            <br />
-            <Input label={"Price"} name={"price"}></Input>
-            <br />
-            <Input label={"Description"} name={"description"}></Input>
-            <br />
-            <Input label={"Picture URL"} name={"Picture"}></Input>
-            <br />
-          </div>
+          <StyledInputContainer>
+            <Input label={"Name"} type="text" name={"name"}></Input>
+            <Input label={"Price"} type="number" name={"price"}></Input>
+            <Input label={"Category"} name={"category"}></Input>
+            <Input
+              label={"Description"}
+              type="text"
+              name={"description"}
+            ></Input>
+            <Input label={"Picture URL"} name={"picture_url"}></Input>
+          </StyledInputContainer>
+          <ButtonContainer>
+            <Button type={"primary"} isFullWidth>
+              Create
+            </Button>
+          </ButtonContainer>
         </StyledForm>
-        <ButtonContainer>
-          <Button type={"primary"} isFullWidth>
-            Create
-          </Button>
-        </ButtonContainer>
       </ContainerForm>
     </div>
   );

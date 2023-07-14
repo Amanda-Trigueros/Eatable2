@@ -8,7 +8,8 @@ export const StyledInput = styled("input")`
   display: block;
   padding: 0.25rem 0;
   font-size: 1.125rem;
-  width: 100%;
+  width: 21.875rem;
+  margin-bottom: 1rem;
   ::placeholder {
     opacity: 0.5;
   }
