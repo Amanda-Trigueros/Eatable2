@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import eatableClient from "../services/eatable-client";
 import styled from "@emotion/styled";
 import { colors } from "../styles/colors";
 import Button from "../components/Button/button";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   max-width: 1000px;
@@ -17,6 +19,7 @@ const FoodPicture = styled.img`
   margin: auto;
   margin-top: 5.88rem;
   margin-bottom: 5.69rem;
+  object-fit: cover;
 `;
 
 const FoodName = styled.p`
@@ -59,7 +62,6 @@ const FoodDescription = styled.div`
   margin: auto;
   margin-left: 3.31rem;
   margin-right: 4rem;
-  
 `;
 
 const ButtonContainer = styled.div`
@@ -74,8 +76,17 @@ const ButtonContainer = styled.div`
   margin-top: 5.88rem;
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: ${colors.white};
+  text-align: center;
+
+  font-size: 1.125rem;
+  font-weight: 600;
+`;
+
 function SingleProduct() {
-  const [productId, setProductId] = useState(4);
+  const { id } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -94,8 +105,8 @@ function SingleProduct() {
       }
     };
 
-    fetchData(productId);
-  }, [productId]);
+    fetchData(id);
+  }, [id]);
 
   const capitalizeWords = (name) => {
     return name
@@ -118,9 +129,11 @@ function SingleProduct() {
         </div>
       )}
       <ButtonContainer>
-        <Button type="primary" isFullWidth>
-          Go Back
-        </Button>
+        <StyledLink to="/products">
+          <Button type="primary" isFullWidth>
+            Go Back
+          </Button>
+        </StyledLink>
       </ButtonContainer>
     </Container>
   );
