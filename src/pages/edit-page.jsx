@@ -72,6 +72,13 @@ function EditProduct() {
   }, [id]);
   console.log(product);
 
+  const handleChange = (e) => {
+    setProduct({
+      ...product,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, price, category, description, picture_url } =
@@ -102,28 +109,34 @@ function EditProduct() {
               type="text"
               name={"name"}
               value={product.name}
+              onChange={handleChange}
+
             />
             <Input
               label={"Price"}
               type="number"
               name={"price"}
               value={product.price}
+              onChange={handleChange}
             />
             <Input
               label={"Category"}
               name={"category"}
               value={product.category}
+              onChange={handleChange}
             />
             <Input
               label={"Description"}
               type="text"
               name={"description"}
               value={product.description}
+              onChange={handleChange}
             />
             <Input
               label={"Picture URL"}
               name={"picture_url"}
               value={product.picture_url}
+              onChange={handleChange}
             />
           </StyledInputContainer>
           <ButtonContainer>

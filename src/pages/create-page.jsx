@@ -1,9 +1,10 @@
-import Input from "../components/Input";
-import styled from "@emotion/styled";
-import { colors } from "../styles/colors";
-import Button from "../components/Button/button";
-import { createProduct } from "../services/products-service";
 import { Link } from "react-router-dom";
+import styled from "@emotion/styled";
+
+import Input from "../components/Input";
+import Button from "../components/Button/button";
+import { colors } from "../styles/colors";
+import { createProduct } from "../services/products-service";
 
 const PageTitle = styled.h1`
   font-size: 1.375rem;
@@ -28,7 +29,6 @@ const StyledInputContainer = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-between;
- 
 `;
 
 const ContainerForm = styled.div`
@@ -55,9 +55,9 @@ const StyledLink = styled(Link)`
 function CreateProduct() {
   async function handleSubmit(e) {
     e.preventDefault();
-    const { name, price, category, description,  picture_url } = e.target.elements;
+    const { name, price, category, description, picture_url } =
+      e.target.elements;
 
-   
     const productData = {
       name: name.value,
       price: price.value,
@@ -66,14 +66,14 @@ function CreateProduct() {
       picture_url: picture_url.value,
     };
 
-    console.log(productData)
+    console.log(productData);
 
-     try {
-       const response = await createProduct(productData);
-       console.log("Product created successfully:", response);
-     } catch (error) {
-       console.error("Error creating product:", error.message);
-     }
+    try {
+      const response = await createProduct(productData);
+      console.log("Product created successfully:", response);
+    } catch (error) {
+      console.error("Error creating product:", error.message);
+    }
   }
 
   return (
