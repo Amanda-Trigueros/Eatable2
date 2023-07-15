@@ -105,6 +105,7 @@ const DeleteModal = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  
 `;
 
 const StyledLink = styled(Link)`

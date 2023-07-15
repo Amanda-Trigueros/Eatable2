@@ -15,14 +15,8 @@ const DeleteContainer = styled.div`
   border-radius: 1.25rem;
   background: var(--light-gray, #f6f6f9);
 
-  &::before {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    background-color: ${colors.pallette.black};
-  }
+ 
+  
 `;
 
 const DeleteTitle = styled.h1`
@@ -34,13 +28,13 @@ function DeleteProduct({ id, onNoClick, onYesClick }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [productId, setProductId] = useState({});
-  
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const response = await getProduct(id);
-        setProductId(response)
+        setProductId(response);
         setError(null);
       } catch (error) {
         setError(error.message);

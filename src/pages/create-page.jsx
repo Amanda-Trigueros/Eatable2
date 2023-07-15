@@ -33,6 +33,8 @@ const StyledInputContainer = styled.div`
 
 const ContainerForm = styled.div`
   padding: 3rem;
+  display: flex;
+  justify-content: center;
 `;
 
 const ButtonContainer = styled.div`
